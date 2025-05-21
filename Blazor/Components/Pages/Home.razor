@@ -1,0 +1,46 @@
+﻿@page "/"
+
+@inject DBService DBService 
+
+<p>@(isConnected ? "Connected to the database" : "Not connected to the database")</p>
+
+<button @onclick="SetupUserTable">Setup User Table</button>
+<p>@result</p>
+
+<button @onclick="GetUsers">Get Users</button>
+@if (users.Count > 0)
+{
+    <ul>
+        @foreach (var user in users)
+        {
+            <li>@user.Name</li>
+            <li>@user.Email</li>
+            <li>@(new string('*', user.Password.Length))</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No users found</p>
+}
+
+@code {
+
+    List<Users> users = new List<Users>();
+
+    private async Task GetUsers()
+    {
+        users = await DBService.GetAllUsers();
+    }
+    string result = string.Empty;
+    private async Task SetupUserTable()
+    {
+        result = await DBService.SetupUserTable();
+    }
+    bool isConnected = false;
+    protected override async Task OnInitializedAsync()
+    {
+        isConnected = await DBService.TestConnectionAsync();
+        Console.WriteLine(isConnected);
+    }
+}
