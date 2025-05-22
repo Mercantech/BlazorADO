@@ -10,14 +10,17 @@
 <button @onclick="GetUsers">Get Users</button>
 @if (users.Count > 0)
 {
-    <ul>
+    <div class="user-grid">
         @foreach (var user in users)
         {
+            @*
             <li>@user.Name</li>
             <li>@user.Email</li>
             <li>@(new string('*', user.Password.Length))</li>
+            *@
+            @*<UserCard User="@user" />*@
         }
-    </ul>
+    </div>
 }
 else
 {
@@ -44,3 +47,12 @@ else
         Console.WriteLine(isConnected);
     }
 }
+
+<style>
+    .user-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1rem;
+        padding: 1rem;
+    }
+</style>
